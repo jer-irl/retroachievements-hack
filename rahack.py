@@ -4,6 +4,7 @@ import readline
 import cmd
 import urllib.request
 import json
+import getpass
 
 consoles = {
     "MEGA_DRIVE": 1,
@@ -50,16 +51,14 @@ class Prompt(cmd.Cmd):
         self._user = None
 
     def do_login(self, args):
-        """Takes 2 space-delimited args: username and password"""
-        split_args = args.split()
-        if len(split_args) != 2:
-            print(self.do_login.__doc__)
-            return
+        """Interactive command to automatically get an API token"""
+        username = input("Username: ")
+        password = getpass.getpass()
 
         request_args = {}
         request_args["r"] = "login"
-        request_args["u"] = split_args[0]
-        request_args["p"] = split_args[1]
+        request_args["u"] = username
+        request_args["p"] = password
 
         response = self._request(request_args)
         if "Success" not in response or not response["Success"]:
